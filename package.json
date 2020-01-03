@@ -6,7 +6,7 @@
   "author": "richard",
   "license": "MIT",
   "scripts": {
-    "getFiles": "node ./getFilesPath.js",
+    "create": "node createIndexFile.js",
     "build": "webpack",
     "server": "http-server ./dist",
     "start": "webpack-dev-server --open"
