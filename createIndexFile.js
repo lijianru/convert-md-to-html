@@ -3,14 +3,12 @@ const fs = require('fs')
 
 const filePath = path.resolve(__dirname, './src')
 
+let requireList = []
+let requireNameList = []
+
 fileDisplay(filePath)
 
 function fileDisplay(filePath) {
-  let content =
-`
-const root = document.getElementById('root');
-root.innerHTML = html;
-`
   fs.readdir(filePath, function (error, files) {
     if (error) {
       console.error(error)
@@ -25,7 +23,10 @@ root.innerHTML = html;
             const isDir = stats.isDirectory()
             if (isFile) {
               const requireFile = fileDir.replace(/\\/g, '/').split('src')[1]
-              writeFile(`const html = require('./src${requireFile}');` + content)
+              const requireName = filename.replace(/\./, '')
+              requireList.push(`const ${requireName} = require('./src${requireFile}');\n`)
+              requireNameList.push(requireName)
+              writeFile(requireList, requireNameList)
             }
             if (isDir) {
               fileDisplay(fileDir)
@@ -37,9 +38,13 @@ root.innerHTML = html;
   })
 }
 
-function writeFile(content) {
-  console.log('content', content)
-  fs.writeFile('index.js', content, 'utf8', (error) => {
+function writeFile(requireList, requireNameList) {
+  const content = requireNameList.map(name => {
+    return '<div> ' + '${' + name + '}' + ' </div><hr />'
+  })
+  const innerHTML = `\`${content.join('')}\``
+  const body = [...requireList, "const root = document.getElementById('root');\n", `root.innerHTML = ${innerHTML}`].join('')
+  fs.writeFile('index.js', body, 'utf8', (error) => {
     if (error) {
       console.error(error)
     }
