@@ -1,2 +1,4 @@
 const html = require('./README.md');
-root.innerHTML = html
+
+const root = document.getElementById('root');
+root.innerHTML = html;

@@ -6,39 +6,24 @@ const filePath = path.resolve(__dirname, './src')
 let requireList = []
 let requireNameList = []
 
-fileDisplay(filePath)
-
-function fileDisplay(filePath) {
-  fs.readdir(filePath, function (error, files) {
-    if (error) {
-      console.error(error)
-    } else {
-      files.forEach(function (filename) {
-        const fileDir = path.join(filePath, filename)
-        fs.stat(fileDir, function (error, stats) {
-          if (error) {
-            console.error(error)
-          } else {
-            const isFile = stats.isFile()
-            const isDir = stats.isDirectory()
-            if (isFile) {
-              const requireFile = fileDir.replace(/\\/g, '/').split('src')[1]
-              const requireName = filename.replace(/\./, '')
-              requireList.push(`const ${requireName} = require('./src${requireFile}');\n`)
-              requireNameList.push(requireName)
-              writeFile(requireList, requireNameList)
-            }
-            if (isDir) {
-              fileDisplay(fileDir)
-            }
-          }
-        })
-      })
+getFiles(filePath)
+createFile(requireList, requireNameList)
+function getFiles(filePath) {
+  fs.readdirSync(filePath).forEach(filename => {
+    const fileDir = path.join(filePath, filename)
+    const stat = fs.statSync(fileDir)
+    if (stat.isFile()) {
+      const requireFile = fileDir.replace(/\\/g, '/').split('src')[1]
+      const requireName = filename.replace(/\./, '')
+      requireList.push(`const ${requireName} = require('./src${requireFile}');\n`)
+      requireNameList.push(requireName)
+    } else if (stat.isDirectory()) {
+      getFiles(fileDir)
     }
   })
 }
 
-function writeFile(requireList, requireNameList) {
+function createFile(requireList, requireNameList) {
   const content = requireNameList.map(name => {
     return '<div> ' + '${' + name + '}' + ' </div><hr />'
   })
