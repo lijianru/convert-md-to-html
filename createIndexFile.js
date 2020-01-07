@@ -1,34 +1,47 @@
 const path = require('path')
 const fs = require('fs')
 
-const filePath = path.resolve(__dirname, './src')
+const folder = 'src/'
+const filePath = path.resolve(__dirname, `./${folder}`)
+const filesPath = []
 
-let requireList = []
-let requireNameList = []
-
-getFiles(filePath)
-createFile(requireList, requireNameList)
+// 获取目标目录下的所有md文件
 function getFiles(filePath) {
   fs.readdirSync(filePath).forEach(filename => {
     const fileDir = path.join(filePath, filename)
     const stat = fs.statSync(fileDir)
     if (stat.isFile()) {
-      const requireFile = fileDir.replace(/\\/g, '/').split('src')[1]
-      const requireName = filename.replace(/\./, '')
-      requireList.push(`const ${requireName} = require('./src${requireFile}');\n`)
-      requireNameList.push(requireName)
+      if (/\.md$/.test(filename)) {
+        filesPath.push({
+          path: fileDir.replace(/\\/g, '/').split(folder)[1],
+          name: filename
+        })
+      }
     } else if (stat.isDirectory()) {
       getFiles(fileDir)
     }
   })
 }
 
-function createFile(requireList, requireNameList) {
-  const content = requireNameList.map(name => {
-    return '<div> ' + '${' + name + '}' + ' </div><hr />'
+// 组装内容
+function assemblyContent(filesPath) {
+  const requireList = []
+  const contentList = []
+  filesPath.forEach(({name, path}) => {
+    const requireVariate = name.replace(/\./, '') + new Date().getTime()
+    const requireItem = `const ${requireVariate} = require('./${folder}${path}');\n`
+    const contentItem = '<h1>' + name + '</h1>\n<div>' + '${' + requireVariate + '}' + '</div><hr />\n'
+    requireList.push(requireItem)
+    contentList.push(contentItem)
   })
-  const innerHTML = `\`${content.join('')}\``
-  const body = [...requireList, "const root = document.getElementById('root');\n", `root.innerHTML = ${innerHTML}`].join('')
+  const requireFiles = requireList.join('')
+  const content = `\`${contentList.join('')}\``
+  const body = [requireFiles, "const root = document.getElementById('root');\n", `root.innerHTML = ${content}`].join('')
+  createFile(body)
+}
+
+// 创建文件并写入内容
+function createFile(body) {
   fs.writeFile('index.js', body, 'utf8', (error) => {
     if (error) {
       console.error(error)
@@ -36,3 +49,6 @@ function createFile(requireList, requireNameList) {
     console.log('文件已经创建成功！！！！！！')
   })
 }
+
+getFiles(filePath)
+assemblyContent(filesPath)
