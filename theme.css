@@ -1,11 +1,14 @@
 .navigation {
-  width: 250px;
-  padding: 20px;
+  width: 200px;
+  padding: 25px;
   margin: 5px 0;
   float: left;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 .content {
   margin-left: 250px;
-  padding: 20px;
+  padding: 25px;
   border-left: 1px solid;
 }

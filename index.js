@@ -1,7 +1,7 @@
-const indexedDB使用md1578383932688 = require('./src/JavaScript/indexedDB/indexedDB使用.md');
-const 灵活使用consolemd1578383932688 = require('./src/JavaScript/灵活使用console.md');
-const markdown语法md1578383932688 = require('./src/markdown语法.md');
-const 浏览器缓存md1578383932688 = require('./src/浏览器/浏览器缓存.md');
+const indexedDB使用md1578390773949 = require('./src/JavaScript/indexedDB/indexedDB使用.md');
+const 灵活使用consolemd1578390773949 = require('./src/JavaScript/灵活使用console.md');
+const markdown语法md1578390773949 = require('./src/markdown语法.md');
+const 浏览器缓存md1578390773949 = require('./src/浏览器/浏览器缓存.md');
 import style from "./theme.css";
 const root = document.getElementById('root');
 root.innerHTML = `<ul class="navigation"><li><a href="#indexedDB使用.md">indexedDB使用.md</a></li>
@@ -9,11 +9,11 @@ root.innerHTML = `<ul class="navigation"><li><a href="#indexedDB使用.md">index
 <li><a href="#markdown语法.md">markdown语法.md</a></li>
 <li><a href="#浏览器缓存.md">浏览器缓存.md</a></li>
 </ul><div class="content"><h1 id="indexedDB使用.md">indexedDB使用.md</h1>
-<div>${indexedDB使用md1578383932688}</div><hr />
+<div>${indexedDB使用md1578390773949}</div><hr />
 <h1 id="灵活使用console.md">灵活使用console.md</h1>
-<div>${灵活使用consolemd1578383932688}</div><hr />
+<div>${灵活使用consolemd1578390773949}</div><hr />
 <h1 id="markdown语法.md">markdown语法.md</h1>
-<div>${markdown语法md1578383932688}</div><hr />
+<div>${markdown语法md1578390773949}</div><hr />
 <h1 id="浏览器缓存.md">浏览器缓存.md</h1>
-<div>${浏览器缓存md1578383932688}</div><hr />
+<div>${浏览器缓存md1578390773949}</div><hr />
 </div>`
