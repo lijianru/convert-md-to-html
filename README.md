@@ -6,6 +6,7 @@
 ## 安装
 ```git
 git clone https://github.com/lijianru/convert-md-to-html.git
+// 安装所需的依赖
 yarn
 ```
 
@@ -14,6 +15,7 @@ yarn
 
 ## 本地运行
 ```
+// 读取src下的所有Markdown文件，并生成对这些Markdown的引用的index.js文件
 yarn create
 // 等到脚本运行结束并无报错的时候在执行以下命令
 yarn start
@@ -24,6 +26,7 @@ yarn server
 
 ## build
 ```
+// 读取src下的所有Markdown文件，并生成对这些Markdown的引用的index.js文件
 yarn create
 // 等到脚本运行结束并无报错的时候在执行以下命令
 yarn build
