@@ -1,7 +1,7 @@
 # 将markdown转换为HTML
 ## 灵感来源
 在看webpack相关的知识的时候发现有一个特别有意思的[markdown-loader](https://github.com/peerigon/markdown-loader)，
-于是打算用webpack来做一个将Markdown转为HTML项目的想法。
+于是就萌生了用webpack来做一个将Markdown转为HTML项目的想法。
 
 ## 安装
 ```git
