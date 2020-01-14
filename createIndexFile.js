@@ -41,23 +41,23 @@ function assemblyContent(filesPath) {
   const contentList = []
   filesPath.forEach(({name, path}) => {
     const requireVariate = name.replace(/\./, '') + new Date().getTime()
-    const requireItem = `const ${requireVariate} = require('./${folder}${path}');\n`
-    const contentItem = `<h1 id="${name}">${name}</h1>\n<div>` + '${' + requireVariate + '}' + '</div><hr />\n'
+    const requireItem = `const ${requireVariate} = require('./${folder}${path}');`
+    const contentItem = `<h1 id="${name}">${name}</h1><div>` + '${' + requireVariate + '}' + '</div><hr />'
     requireList.push(requireItem)
     contentList.push(contentItem)
   })
-  const requireString = requireList.join('')
-  const contentString = 'root.innerHTML = ' + `\`${contentList.join('')}\``
+  const requireString = requireList.join('\n')
+  const contentString = 'root.innerHTML = ' + `\`${contentList.join('\n')}\``
   createFile(requireString, contentString)
 }
 
 // 创建文件并写入内容
 function createFile(requireString, contentString) {
   const data = fs.readFileSync('./template.js', 'utf8').split('\n')
-  console.log(data)
+  // 替换template.js中第一行的const md = require('./README.md')
   data[0] = requireString
+  // 替换template.js中倒数第二行中的root.innerHTML = md
   data[data.length - 2] = contentString
-  console.log(data)
   fs.writeFile('index.js', data.join('\n'), 'utf8', (error) => {
     if (error) {
       console.error(error)
