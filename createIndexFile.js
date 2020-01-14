@@ -37,29 +37,28 @@ function getFiles(filePath) {
 function assemblyContent(filesPath) {
   // 存储require语句
   const requireList = []
-  const navigationList = []
   // 存储每一个文件的内容
   const contentList = []
   filesPath.forEach(({name, path}) => {
     const requireVariate = name.replace(/\./, '') + new Date().getTime()
     const requireItem = `const ${requireVariate} = require('./${folder}${path}');\n`
-    const navigationItem = `<li><a href="#${name}">${name}</a></li>\n`
     const contentItem = `<h1 id="${name}">${name}</h1>\n<div>` + '${' + requireVariate + '}' + '</div><hr />\n'
     requireList.push(requireItem)
-    navigationList.push(navigationItem)
     contentList.push(contentItem)
   })
-  requireList.push('import style from "./theme.css";\n')
-  const navigation = `<ul class="navigation">${navigationList.join('')}</ul>`
-  const content = `<div class="content">${contentList.join('')}</div>`
-  const container = `\`${navigation}${content}\``
-  const body = [requireList.join(''), "const root = document.getElementById('root');\n", `root.innerHTML = ${container}`].join('')
-  createFile(body)
+  const requireString = requireList.join('')
+  const contentString = 'root.innerHTML = ' + `\`${contentList.join('')}\``
+  createFile(requireString, contentString)
 }
 
 // 创建文件并写入内容
-function createFile(body) {
-  fs.writeFile('index.js', body, 'utf8', (error) => {
+function createFile(requireString, contentString) {
+  const data = fs.readFileSync('./template.js', 'utf8').split('\n')
+  console.log(data)
+  data[0] = requireString
+  data[data.length - 2] = contentString
+  console.log(data)
+  fs.writeFile('index.js', data.join('\n'), 'utf8', (error) => {
     if (error) {
       console.error(error)
     }
