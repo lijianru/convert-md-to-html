@@ -3,15 +3,24 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
-    main: path.join(__dirname, './index.js')
+    main: path.resolve(__dirname, './index.js')
   },
   mode: "development",
   output: {
-    path: path.join(__dirname, './dist'),
+    path: path.resolve(__dirname, './dist'),
     filename: '[name].js'
+  },
+  devServer: {
+    historyApiFallback: true,
+    open: true,
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.md$/,
         use: [
@@ -30,8 +39,8 @@ module.exports = {
   },
   plugins: [
     new htmlWebpackPlugin({
-      template: path.join(__dirname, './template.html'),
-      favicon: path.join(__dirname, './favicon.ico')
+      template: path.resolve(__dirname, './template.html'),
+      favicon: path.resolve(__dirname, './favicon.ico')
     })
   ]
 }

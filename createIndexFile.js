@@ -37,27 +37,33 @@ function getFiles(filePath) {
 function assemblyContent(filesPath) {
   // 存储require语句
   const requireList = []
-  // 存储每一个文件的内容
-  const contentList = []
+  // 存储每一个require的变量
+  const requireMarkdownNames = []
   filesPath.forEach(({name, path}) => {
-    const requireVariate = name.replace(/\./, '') + new Date().getTime()
-    const requireItem = `const ${requireVariate} = require('./${folder}${path}');`
-    const contentItem = `<h1 id="${name}">${name}</h1><div>` + '${' + requireVariate + '}' + '</div><hr />'
+    const requireMarkdownName = `md${name.replace(/\./, '')}`
+    const requireItem = `import * as ${requireMarkdownName} from './${folder}${path}';`
     requireList.push(requireItem)
-    contentList.push(contentItem)
+    requireMarkdownNames.push(requireMarkdownName)
   })
   const requireString = requireList.join('\n')
-  const contentString = 'root.innerHTML = ' + `\`${contentList.join('\n')}\``
-  createFile(requireString, contentString)
+  createFile(requireString, requireMarkdownNames)
 }
 
 // 创建文件并写入内容
-function createFile(requireString, contentString) {
+function createFile(requireString, requireMarkdownNames) {
   const data = fs.readFileSync('./template.js', 'utf8').split('\n')
-  // 替换template.js中第一行的const md = require('./README.md')
-  data[0] = requireString
-  // 替换template.js中倒数第二行中的root.innerHTML = md
-  data[data.length - 2] = contentString
+  // 替换template.js中的const md = require('./README.md')
+  data[3] = requireString
+  // 替换template.js中的<li><Link to="/readme">Home</Link></li>
+  const links = requireMarkdownNames.map(requireMarkdownName => {
+    return `      <li><Link to="/${requireMarkdownName}">${requireMarkdownName.replace(/md/g, '')}</Link></li>`
+  })
+  data[8] = links.join('\n')
+  // 替换template.js中的<Route path="/readme"><div dangerouslySetInnerHTML={{__html: readme.default}}></div></Route>
+  const routers = requireMarkdownNames.map(requireMarkdownName => {
+    return `      <Route path="/${requireMarkdownName}"><div dangerouslySetInnerHTML={{__html: ${requireMarkdownName}.default}}></div></Route>`
+  })
+  data[11] = routers.join('\n')
   fs.writeFile('index.js', data.join('\n'), 'utf8', (error) => {
     if (error) {
       console.error(error)
