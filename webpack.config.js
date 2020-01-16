@@ -3,8 +3,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
-    // TODO：更改为index.js
-    main: path.resolve(__dirname, './template.js')
+    main: path.resolve(__dirname, './index.js')
   },
   mode: "development",
   output: {

@@ -9,9 +9,7 @@ const App = () => (
       <li><Link to="/readme">Home</Link></li>
     </ul>
     <Switch>
-      <Route path="/readme">
-        <div dangerouslySetInnerHTML={{__html: readme.default}}></div>
-      </Route>
+      <Route path="/readme"><div dangerouslySetInnerHTML={{__html: readme.default}}></div></Route>
     </Switch>
   </BrowserRouter>
 )
