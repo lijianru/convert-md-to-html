@@ -22,7 +22,7 @@ yarn start
 // 或者
 yarn server
 ```
-注：在启动后，添加/删除/修改 `src` 下的 `Markdown` 的时候，只用运行 `yan create` 即可。
+注：在启动后，添加/删除 `src` 下的 `Markdown` 的时候，只用运行 `yan create` 即可。
 
 ## build
 ```
