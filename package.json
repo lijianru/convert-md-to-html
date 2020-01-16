@@ -9,7 +9,7 @@
     "create": "node createIndexFile.js",
     "build": "webpack",
     "server": "http-server ./dist",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server"
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",

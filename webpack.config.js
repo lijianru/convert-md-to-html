@@ -10,6 +10,10 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].js'
   },
+  devServer: {
+    historyApiFallback: true,
+    open: true,
+  },
   module: {
     rules: [
       {
