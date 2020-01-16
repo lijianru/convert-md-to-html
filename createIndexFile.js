@@ -46,11 +46,7 @@ function assemblyContent(filesPath) {
     requireMarkdownNames.push(requireMarkdownName)
   })
   const requireString = requireList.join('\n')
-  createFile(requireString, requireMarkdownNames)
-}
-
-// 创建文件并写入内容
-function createFile(requireString, requireMarkdownNames) {
+  // 获取模板文件
   const data = fs.readFileSync('./template.js', 'utf8').split('\n')
   // 替换template.js中的const md = require('./README.md')
   data[3] = requireString
@@ -64,6 +60,11 @@ function createFile(requireString, requireMarkdownNames) {
     return `      <Route path="/${requireMarkdownName}"><div dangerouslySetInnerHTML={{__html: ${requireMarkdownName}.default}}></div></Route>`
   })
   data[11] = routers.join('\n')
+  createFile(data)
+}
+
+// 创建文件并写入内容
+function createFile(data) {
   fs.writeFile('index.js', data.join('\n'), 'utf8', (error) => {
     if (error) {
       console.error(error)
