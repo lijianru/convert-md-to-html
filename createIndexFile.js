@@ -49,17 +49,18 @@ function assemblyContent(filesPath) {
   // 获取模板文件
   const data = fs.readFileSync('./template.js', 'utf8').split('\n')
   // 替换template.js中的const md = require('./README.md')
-  data[3] = requireString
+  data[5] = requireString
   // 替换template.js中的<li><Link to="/readme">Home</Link></li>
   const links = requireMarkdownNames.map(requireMarkdownName => {
-    return `      <li><Link to="/${requireMarkdownName}">${requireMarkdownName.replace(/md/g, '')}</Link></li>`
+    const navigationName = requireMarkdownName.replace(/md/g, '')
+    return `      <Menu.Item key="${navigationName}"><Link to="/${requireMarkdownName}">${navigationName}</Link></Menu.Item>`
   })
-  data[8] = links.join('\n')
+  data[16] = links.join('\n')
   // 替换template.js中的<Route path="/readme"><div dangerouslySetInnerHTML={{__html: readme.default}}></div></Route>
   const routers = requireMarkdownNames.map(requireMarkdownName => {
     return `      <Route path="/${requireMarkdownName}"><div dangerouslySetInnerHTML={{__html: ${requireMarkdownName}.default}}></div></Route>`
   })
-  data[11] = routers.join('\n')
+  data[24] = routers.join('\n')
   createFile(data)
 }
 
