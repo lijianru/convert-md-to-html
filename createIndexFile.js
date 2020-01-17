@@ -48,19 +48,28 @@ function assemblyContent(filesPath) {
   const requireString = requireList.join('\n')
   // 获取模板文件
   const data = fs.readFileSync('./template.js', 'utf8').split('\n')
-  // 替换template.js中的const md = require('./README.md')
-  data[5] = requireString
-  // 替换template.js中的<li><Link to="/readme">Home</Link></li>
-  const links = requireMarkdownNames.map(requireMarkdownName => {
-    const navigationName = requireMarkdownName.replace(/md/g, '')
-    return `      <Menu.Item key="${navigationName}"><Link to="/${requireMarkdownName}">${navigationName}</Link></Menu.Item>`
+  // 替换原文件中的内容
+  data.map((item, index) => {
+    // 替换template.js中的const md = require('./README.md')
+    if (item.includes('./README.md')) {
+      data[index] = requireString
+    }
+    // 替换template.js中的<li><Link to="/readme">Readme</Link></li>
+    if (item.includes('<Link to="/readme">Readme</Link>')) {
+      const links = requireMarkdownNames.map(requireMarkdownName => {
+        const navigationName = requireMarkdownName.replace(/md/g, '')
+        return `          <Menu.Item key="${navigationName}"><Link to="/${requireMarkdownName}">${navigationName}</Link></Menu.Item>`
+      })
+      data[index] = links.join('\n')
+    }
+    // 替换template.js中的<Route path="/readme"><div dangerouslySetInnerHTML={{__html: readme.default}}></div></Route>
+    if (item.includes('<div dangerouslySetInnerHTML={{__html: readme.default}}></div>')) {
+      const routers = requireMarkdownNames.map(requireMarkdownName => {
+        return `              <Route path="/${requireMarkdownName}"><div dangerouslySetInnerHTML={{__html: ${requireMarkdownName}.default}}></div></Route>`
+      })
+      data[index] = routers.join('\n')
+    }
   })
-  data[16] = links.join('\n')
-  // 替换template.js中的<Route path="/readme"><div dangerouslySetInnerHTML={{__html: readme.default}}></div></Route>
-  const routers = requireMarkdownNames.map(requireMarkdownName => {
-    return `      <Route path="/${requireMarkdownName}"><div dangerouslySetInnerHTML={{__html: ${requireMarkdownName}.default}}></div></Route>`
-  })
-  data[24] = routers.join('\n')
   createFile(data)
 }
 
