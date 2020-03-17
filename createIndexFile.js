@@ -1,12 +1,13 @@
 const path = require('path')
 const fs = require('fs')
+const watch = require('node-watch')
 
 // 需要读取的文件夹
 const folder = 'src/'
 // 需要读取文件夹的绝对路径
 const filePath = path.resolve(__dirname, `./${folder}`)
 // 存储读取结果，path：路径，name：文件名
-const filesPath = []
+let filesPath = []
 
 /**
  * 获取目标目录下的所有md文件
@@ -85,3 +86,9 @@ function createFile(data) {
 
 getFiles(filePath)
 assemblyContent(filesPath)
+
+watch('./src/', { delay: 500, recursive: true }, () => {
+  filesPath = []
+  getFiles(filePath)
+  assemblyContent(filesPath)
+})
